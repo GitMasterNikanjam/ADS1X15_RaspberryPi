@@ -328,8 +328,11 @@ public:
   // Simple handle conversion without ready interrupt pin. Read all channel data in blocking mode.
   void handleConversion(void);
 
-  // Handle conversion. Read data if ready then request new conversion. Conversion in no blocking mode.
-  void handleConversionNoBlocking(void);
+  /**
+   * @brief Handle conversion. Read data if ready then request new conversion. Conversion in no blocking mode.
+   * @return The channel number that read.
+   *  */ 
+  int8_t handleConversionNoBlocking(void);
 
   /*
   Config ADS sensor. begin(), setGain(), setDataRate(), set continuous mode and enable Ready/ALART pin interrup pin and function action.

@@ -806,8 +806,10 @@ void ADS1115::requestADC_Differential_2_3()
   _requestADC(ADS1X15_MUX_DIFF_2_3);
 }
 
-void ADS1115::handleConversionNoBlocking(void)
+int8_t ADS1115::handleConversionNoBlocking(void)
 {
+  int8_t channel_read = -1;
+
   if (_rdyFlag)
   {
       // save the value
@@ -817,18 +819,22 @@ void ADS1115::handleConversionNoBlocking(void)
           case 0:
               valueRaw[0] = ADS_value;
               value[0] = (refVolt * (float)valueRaw[0]/ADS1115_RAW_RANGE);
+              channel_read = 0;
           break;
           case 1:
               valueRaw[1] = ADS_value;
               value[1] = (refVolt * (float)valueRaw[1]/ADS1115_RAW_RANGE);
+              channel_read = 1;
           break;
           case 2:
               valueRaw[2] = ADS_value;
               value[2] = (refVolt * (float)valueRaw[2]/ADS1115_RAW_RANGE);
+              channel_read = 2;
           break;
           case 3:
               valueRaw[3] = ADS_value;
               value[3] = (refVolt * (float)valueRaw[3]/ADS1115_RAW_RANGE);
+              channel_read = 3;
           break;
       }
       // request next channel
@@ -837,6 +843,8 @@ void ADS1115::handleConversionNoBlocking(void)
       readADC(channel);
       _rdyFlag = false;
   }
+
+  return channel_read;
 }
 
 void ADS1115::handleConversion(void)
